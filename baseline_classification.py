@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
@@ -94,6 +94,12 @@ def main():
     
     log("\nLogistic Regression Results:")
     log(f"Accuracy: {accuracy_score(y_test, y_pred_lr):.4f}")
+    
+    # Cross-Validation for LR
+    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    cv_scores_lr = cross_val_score(lr_model, X_train_tfidf, y_train, cv=skf, scoring='accuracy')
+    log(f"5-Fold Stratified CV Accuracy: {cv_scores_lr.mean():.4f} (+/- {cv_scores_lr.std() * 2:.4f})")
+    
     log("Classification Report:")
     log(classification_report(y_test, y_pred_lr))
     
@@ -105,6 +111,11 @@ def main():
     
     log("\nNaive Bayes Results:")
     log(f"Accuracy: {accuracy_score(y_test, y_pred_nb):.4f}")
+    
+    # Cross-Validation for NB
+    cv_scores_nb = cross_val_score(nb_model, X_train_tfidf, y_train, cv=skf, scoring='accuracy')
+    log(f"5-Fold Stratified CV Accuracy: {cv_scores_nb.mean():.4f} (+/- {cv_scores_nb.std() * 2:.4f})")
+    
     log("Classification Report:")
     log(classification_report(y_test, y_pred_nb))
 
