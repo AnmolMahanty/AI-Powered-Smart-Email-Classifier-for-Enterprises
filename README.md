@@ -196,3 +196,59 @@ python bert_finetuning.py
 
 **Milestone 1**: ✅ Complete
 **Milestone 2**: ✅ Complete
+**Milestone 3**: ✅ Complete
+
+---
+
+## Milestone 3: Urgency Detection & Scoring
+
+---
+
+## Overview
+
+Milestone 3 focused on implementing a **Hybrid Urgency Detection System** to classify emails into priority levels (Low, Medium, High). The system prioritizes "Safety" using strict rules while leveraging an ML model for general context, ensuring critical issues are never missed.
+
+## What I Did
+
+### 1. Hybrid Architecture Implementation
+Developed a "Confidence-Aware" Hybrid System:
+- **Rule-Based Engine (`rule_based_urgency.py`)**: Detects high-risk keywords (e.g., "system down", "security breach") to force **High Urgency**.
+- **ML Model (`urgency_model_training.py`)**: Fine-tuned **DistilBERT** on a 3-class dataset to handle general context.
+- **Inference Logic (`hybrid_inference.py`)**:
+    1.  **Critical Override**: Rule matches -> High.
+    2.  **High Confidence ML**: Model > 85% confidence -> Trust Model.
+    3.  **Safety Fallback**: Model uncertain & Medium keyword match -> Medium.
+
+### 2. Model Training
+- **Algorithm**: DistilBERT (`distilbert-base-uncased`)
+- **Dataset**: `merged_3class_urgency.csv` (Mapped: 0=Low, 1=Medium, 2=High)
+- **Results**:
+    - **Accuracy**: **92.31%**
+    - **F1 Score (Weighted)**: **92.31%**
+    - **Validation Loss**: **0.32**
+
+### 3. Verification
+Validated specific test cases:
+- "System is down" -> **High** (Rule Override) ✅
+- "Newsletter subscription" -> **Low** (ML Prediction) ✅
+- "Help with issue" -> **Medium** (Rule Fallback) ✅
+
+## Files Created (Milestone 3)
+- `urgency_model_training.py`: Script to fine-tune DistilBERT for urgency.
+- `rule_based_urgency.py`: Module defining critical/medium regex rules.
+- `hybrid_inference.py`: Production-ready inference script combining ML + Rules.
+- `final_urgency_model/`: Directory containing the saved model.
+
+## Usage (Milestone 3)
+
+**Train the Model:**
+```bash
+python urgency_model_training.py
+```
+
+**Run Hybrid Inference:**
+```bash
+python hybrid_inference.py
+```
+
+---
