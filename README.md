@@ -226,6 +226,12 @@ Developed a "Confidence-Aware" Hybrid System:
     - **Accuracy**: **92.31%**
     - **F1 Score (Weighted)**: **92.31%**
     - **Validation Loss**: **0.32**
+    - **Confusion Matrix**:
+      ```text
+      [[46  0  0]   <- Low (Predicted perfectly)
+       [ 0 62  7]   <- Medium
+       [ 0  6 48]]  <- High
+      ```
 
 ### 3. Verification
 Validated specific test cases:
