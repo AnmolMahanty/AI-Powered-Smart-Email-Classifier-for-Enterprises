@@ -1,6 +1,6 @@
 # AI-Powered Smart Email Classifier for Enterprises
 
-Live Link: https://email-classifier-frontend.onrender.com/
+Live Link: https://enterprises-email-classifier.onrender.com/
 
 ## Milestone 1: Data Collection & Preprocessing
 
