@@ -87,7 +87,7 @@ function App() {
   // -- Dark Mode State --
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode');
-    return saved ? JSON.parse(saved) : false;
+    return saved !== null ? JSON.parse(saved) : true;
   });
   
   // -- Toast State --

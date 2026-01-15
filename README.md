@@ -1,5 +1,7 @@
 # AI-Powered Smart Email Classifier for Enterprises
 
+Live Link: https://email-classifier-frontend.onrender.com/
+
 ## Milestone 1: Data Collection & Preprocessing
 
 ---
@@ -279,11 +281,11 @@ Developed a robust Python backend to serve models and data:
 - **Data Persistence**: Local storage implementation for history tracking.
 - **CORS Support**: Configured for seamless frontend-backend communication.
 
-### 3. Deployment Readiness (Docker)
-Containerized the application for "Write Once, Run Anywhere":
-- **Multi-Stage Build**: Optimized `Dockerfile` building React frontend (Node.js) and Python backend separately.
-- **Static Serving**: FastAPI serves the built React app, allowing single-port deployment (Port 7860).
-- **Hugging Face Spaces Compatible**: Configured to run directly on standard cloud container platforms.
+### 3. Split-Stack Deployment Architecture
+Implemented a modern "Split Deployment" strategy to leverage the best usage:
+- **Backend (Hugging Face Spaces)**: Hosts the Dockerized FastAPI application + Models (High RAM availability).
+- **Frontend (Render)**: Hosts the React application as a global Static Site (CDN performance).
+- **Interconnectivity**: Configured `VITE_API_URL` environment variables to enable secure Cross-Origin Resource Sharing (CORS) between the two distinct platforms.
 
 ## Files Created (Milestone 4)
 - `frontend/`: Complete React project source code.
@@ -353,10 +355,10 @@ Beyond the core requirements, I implemented several advanced features to enhance
 - **Why**: Facilitates offline reporting and archiving of email analysis data for upper management.
 - **Tech**: `jspdf` and `jspdf-autotable` client-side generation.
 
-### 7. 🐳 Cloud-Native Containerization (Hugging Face Spaces)
-- **What**: A specialized multi-stage Docker build that serves the React frontend through the FastAPI backend on a single port.
-- **Why**: Enables zero-config deployment to modern cloud platforms like Hugging Face Spaces that restrict multi-port access.
-- **Tech**: Docker Multi-Stage Builds, Nginx-free static serving.
+### 7. ☁️ Cloud-Native Split Architecture
+- **What**: A decoupled deployment strategy hosting the Backend on **Hugging Face Spaces** (Docker) and Frontend on **Render** (Static Site).
+- **Why**: Maximizes performance and resources by using specialized platforms for each layer (High RAM for ML, Global CDN for UI) while remaining 100% free.
+- **Tech**: Docker API-only builds, Environment Variable configuration (`VITE_API_URL`), CORS policy management.
 
 
 

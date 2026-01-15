@@ -1,37 +1,17 @@
-# Stage 1: Build React Frontend
-FROM node:18-slim AS builder
-
-WORKDIR /app
-COPY frontend/package*.json ./
-RUN npm install
-COPY frontend/ ./
-RUN npm run build
-
-# Stage 2: Python Backend
+# Dockerfile for Backend-Only Deployment (Hugging Face Spaces)
 FROM python:3.9-slim
-
 WORKDIR /app
-
-# Install system dependencies if needed
-# RUN apt-get update && apt-get install -y ...
-
-# Copy Requirements
+# 1. Install Dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy Models and Code (Exclude frontend folder to keep context small if possible, but simpler to copy root)
-# We copy specific files to avoid clutter
+# 2. Copy Code & Models
+# Note: We exclude the 'frontend' folder to avoid build errors
 COPY app/ ./app/
 COPY final_urgency_model/ ./final_urgency_model/
 COPY final_bert_model/ ./final_bert_model/
 COPY hybrid_inference.py .
 COPY rule_based_urgency.py .
-
-# Copy Built Frontend from Stage 1 to FastAPI Static Dir
-COPY --from=builder /app/dist ./app/static
-
-# Expose Port (Hugging Face Spaces uses 7860)
+# 3. Expose Port
 EXPOSE 7860
-
-# Run Command
+# 4. Run FastAPI
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]
