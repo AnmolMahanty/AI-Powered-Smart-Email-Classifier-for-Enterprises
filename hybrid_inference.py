@@ -35,20 +35,30 @@ class HybridUrgencyClassifier:
         3. Fallback: Medium Rule or ML Best Guess
         """
         
+        # Common Explanation Logic
+        # We want XAI for all decisions to support the UI Heatmap
+        # Using the label from the specific path as the target
+        
         # Step 1: Rule-Based Check
         rule_result = detect_urgency_rules(text)
         
         # POLICY: Critical Rule Override
         if rule_result['label'] == "High":
+             # Explain why 'High' (even if rule, we can show ML support or just rule keyword?)
+             # For rule, the explanation is the rule itself, but user wants Heatmap.
+             # We can run the ML explanation on "High" to see if ML *also* sees it.
+             highlights = self._explain_prediction(text, "High")
              return {
                 "final_label": "High",
                 "source": "Rule (Critical Override)",
                 "confidence": 1.0,
-                "details": rule_result
+                "details": rule_result,
+                "highlights": highlights
             }
 
         # Step 2: ML Prediction
         ml_result = self._get_ml_prediction(text)
+        highlights = self._explain_prediction(text, ml_result['label_name'])
         
         # POLICY: High Confidence ML
         if ml_result['confidence'] >= CONFIDENCE_THRESHOLD:
@@ -56,25 +66,27 @@ class HybridUrgencyClassifier:
                 "final_label": ml_result['label_name'],
                 "source": "ML (High Confidence)",
                 "confidence": ml_result['confidence'],
-                "details": ml_result
+                "details": ml_result,
+                "highlights": highlights
             }
             
         # Step 3: Low Confidence ML - Fallback Logic
-        # If ML is unsure, we check if a "Medium" rule was triggered.
         if rule_result['label'] == "Medium":
              return {
                 "final_label": "Medium",
                 "source": "Rule (Fallback Support)",
                 "confidence": 0.8,
-                "details": rule_result
+                "details": rule_result,
+                "highlights": highlights # Use ML highlights for context
             }
             
-        # Default to ML's best guess if no rules apply
+        # Default to ML's best guess
         return {
             "final_label": ml_result['label_name'],
             "source": "ML (Low Confidence)",
             "confidence": ml_result['confidence'],
-            "details": ml_result
+            "details": ml_result,
+            "highlights": highlights
         }
 
     def _get_ml_prediction(self, text):
@@ -94,6 +106,49 @@ class HybridUrgencyClassifier:
             "label_name": self.label_map[pred_idx.item()],
             "confidence": conf.item()
         }
+
+    def _explain_prediction(self, text, target_label):
+        """
+        Simple Perturbation-based Feature Importance (XAI).
+        Masks each word and checks the drop in confidence for the target label.
+        Returns: List[Dict] -> [{'word': 'broken', 'score': 0.45}, ...]
+        """
+        if not self.model:
+            return []
+
+        words = text.split()
+        if len(words) < 2:
+            return []
+
+        # Base prediction confidence for the target label
+        base_pred = self._get_ml_prediction(text)
+        base_conf = base_pred['confidence']
+        importance_scores = []
+
+        for i in range(len(words)):
+            # Create masked text
+            masked_words = words[:i] + ["[MASK]"] + words[i+1:]
+            masked_text = " ".join(masked_words)
+            
+            # Predict on masked text
+            masked_pred = self._get_ml_prediction(masked_text)
+            
+            # If label changed, that's a HUGE signal. 
+            if masked_pred['label_name'] != target_label:
+                drop = base_conf  # Max drop if label flips
+            else:
+                drop = max(0, base_conf - masked_pred['confidence'])
+            
+            # Only keep positive contributions
+            # Lowered threshold to ensure we catch even small signals
+            if drop > 0.0001:
+                importance_scores.append({"word": words[i], "score": float(drop)})
+
+        # Sort by drop (descending)
+        importance_scores.sort(key=lambda x: x["score"], reverse=True)
+        
+        # Return top words with scores
+        return importance_scores[:10]
 
 # Interactive Test
 if __name__ == "__main__":

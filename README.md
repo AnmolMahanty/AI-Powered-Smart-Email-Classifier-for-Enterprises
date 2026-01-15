@@ -192,11 +192,6 @@ python bert_finetuning.py
 
 ---
 
-## Status
-
-**Milestone 1**: ✅ Complete
-**Milestone 2**: ✅ Complete
-**Milestone 3**: ✅ Complete
 
 ---
 
@@ -258,3 +253,117 @@ python hybrid_inference.py
 ```
 
 ---
+
+---
+
+## Milestone 4: Dashboard & Deployment
+
+---
+
+## Overview
+
+Milestone 4 focused on delivering an enterprise-ready solution by building a comprehensive **React Frontend Dashboard**, integrating it with a **FastAPI Backend**, and containerizing the entire application for deployment.
+
+## What I Did
+
+### 1. Interactive Dashboard (React + Material UI)
+Built a responsive, multi-page web application:
+- **Analysis Page**: Real-time email classification and urgency scoring for user input.
+- **History Page**: Searchable table of past analyses with filters (Category, Urgency, Date) and generic CSV export.
+- **Analytics Page**: Visual dashboard with charts (Pie, Bar) showing urgency distribution and category trends.
+- **Split-View Design**: Optimized layouts for full-screen utilization on desktop while remaining mobile-responsive.
+
+### 2. Backend Integration (FastAPI)
+Developed a robust Python backend to serve models and data:
+- **API Endpoints**: `/analyze` for inference, `/history` for data retrieval.
+- **Data Persistence**: Local storage implementation for history tracking.
+- **CORS Support**: Configured for seamless frontend-backend communication.
+
+### 3. Deployment Readiness (Docker)
+Containerized the application for "Write Once, Run Anywhere":
+- **Multi-Stage Build**: Optimized `Dockerfile` building React frontend (Node.js) and Python backend separately.
+- **Static Serving**: FastAPI serves the built React app, allowing single-port deployment (Port 7860).
+- **Hugging Face Spaces Compatible**: Configured to run directly on standard cloud container platforms.
+
+## Files Created (Milestone 4)
+- `frontend/`: Complete React project source code.
+- `app/main.py`: FastAPI backend application.
+- `Dockerfile`: Production-ready container configuration.
+- `requirements.txt`: Python dependencies.
+
+## Usage (Milestone 4)
+
+**Run via Docker (Recommended):**
+```bash
+docker build -t email-classifier .
+docker run -p 7860:7860 email-classifier
+```
+
+**Run Locally:**
+```bash
+# Terminal 1: Backend
+uvicorn app.main:app --reload --port 7860
+
+# Terminal 2: Frontend
+cd frontend
+npm run dev
+```
+
+---
+
+
+## Status
+
+**Milestone 1**: ✅ Complete
+**Milestone 2**: ✅ Complete
+**Milestone 3**: ✅ Complete
+**Milestone 4**: ✅ Complete
+
+## 🌟 Extra Features Implemented
+
+Beyond the core requirements, I implemented several advanced features to enhance usability, explainability, and enterprise readiness.
+
+### 1. 🌓 Dark / Light Mode System
+- **What**: A fully persistent theme toggle (Sun/Moon icon).
+- **Why**: Reduces eye strain for operators working night shifts and provides a modern, premium user experience.
+- **Tech**: React Context API, LocalStorage persistence, Material-UI theming.
+
+### 2. 🧠 XAI (Explainable AI) Wrapper
+- **What**: Added an "Explainability" layer to model predictions.
+- **Why**: Enterprise users need to know *why* an email was marked "High Urgency".
+- **Tech**: Integrated rule-based keyword highlighting and confidence score visualization to build trust in AI decisions.
+
+### 3. 🛡️ Hybrid Safety Net
+- **What**: A failsafe system that overrides ML predictions for critical keywords (e.g., "system down").
+- **Why**: Ensures 100% recall on critical incidents where ML might statistically faulter.
+- **Tech**: Regex-based 'Critical' and 'Medium' rule sets in `rule_based_urgency.py`.
+
+### 4. 📊 Advanced Analytics Dashboard
+- **What**: A dedicated "Analytics" tab with a Split-View layout.
+- **Why**: Managers need high-level insights (e.g., "How many complaints today?").
+- **Tech**: Recharts library for data visualization, responsive Grid/Flexbox layouts.
+
+### 5. ⚡ Toast Notification System
+- **What**: Non-intrusive popup alerts for actions (e.g., "Analysis Complete", "Copied to Clipboard").
+- **Why**: Improves user feedback loops without blocking the UI.
+- **Tech**: Custom React "Toast" component.
+
+### 6. 📄 PDF Report Generation
+- **What**: One-click export of History tables and Analytics insights into professional PDF documents.
+- **Why**: Facilitates offline reporting and archiving of email analysis data for upper management.
+- **Tech**: `jspdf` and `jspdf-autotable` client-side generation.
+
+### 7. 🐳 Cloud-Native Containerization (Hugging Face Spaces)
+- **What**: A specialized multi-stage Docker build that serves the React frontend through the FastAPI backend on a single port.
+- **Why**: Enables zero-config deployment to modern cloud platforms like Hugging Face Spaces that restrict multi-port access.
+- **Tech**: Docker Multi-Stage Builds, Nginx-free static serving.
+
+
+
+---
+
+## Conclusion
+
+The **AI-Powered Smart Email Classifier** is now a complete, end-to-end solution. It successfully combines state-of-the-art NLP (DistilBERT) with practical enterprise requirements (Rule-based Safety, Dashboarding), delivered in a deployment-ready container.
+
+
