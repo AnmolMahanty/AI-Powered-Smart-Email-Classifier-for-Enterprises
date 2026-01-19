@@ -224,7 +224,7 @@ function Analysis({
                             </Box>
                             <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} color="text.primary" gutterBottom>AI Interpretation</Typography>
                             <Typography variant="body2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' }, maxWidth: 300 }} align="center">
-                                Waiting for input. The analysis will appear here with urgency scoring and recommended actions.
+                                Waiting for input. The analysis will appear here with urgency scoring.
                             </Typography>
                         </Box>
                     ) : (
@@ -242,10 +242,15 @@ function Analysis({
                               width: '100%',
                               gap: { xs: 1.5, sm: 0 }
                             }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                    <AutoAwesomeIcon sx={{ color: 'primary.main', fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
-                                    <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>AI Analysis</Typography>
-                                </Box>
+                                    <Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                            <AutoAwesomeIcon sx={{ color: 'primary.main', fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+                                            <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>AI Analysis</Typography>
+                                        </Box>
+                                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5, fontStyle: 'italic' }}>
+                                            Highlighted words indicate terms that significantly influenced the urgency classification.
+                                        </Typography>
+                                    </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                     <Box sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
                                         <Typography variant="caption" sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }} display="block" color="text.secondary" gutterBottom>MODEL CONFIDENCE</Typography>
@@ -337,7 +342,7 @@ function Analysis({
                                             fontSize: { xs: '0.85rem', sm: '1rem' }
                                           }}
                                         >
-                                            {renderHeatmap(lastResult.subject, lastResult.xai_highlights)}
+                                            {renderHeatmap(lastResult.subject, lastResult.xai_highlights, getUrgencyColor(lastResult.urgency))}
                                         </Typography>
                                     </Paper>
                                 </Box>
@@ -364,7 +369,7 @@ function Analysis({
                                             fontSize: { xs: '0.8rem', sm: '0.875rem' }
                                           }}
                                         >
-                                            {renderHeatmap(lastResult.text, lastResult.xai_highlights)}
+                                            {renderHeatmap(lastResult.text, lastResult.xai_highlights, getUrgencyColor(lastResult.urgency))}
                                         </Typography>
                                     </Paper>
                                 </Box>

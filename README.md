@@ -1,6 +1,9 @@
 # AI-Powered Smart Email Classifier for Enterprises
 
 Live Link: https://enterprises-email-classifier.onrender.com/
+Backend Space Link (Hugging Face): 
+
+> **Note**: The Hugging Face Space contains the backend and a simple UI. To properly experience the full application, please use the **Live Link** above.
 
 ## Milestone 1: Data Collection & Preprocessing
 
@@ -331,9 +334,9 @@ Beyond the core requirements, I implemented several advanced features to enhance
 - **Tech**: React Context API, LocalStorage persistence, Material-UI theming.
 
 ### 2. 🧠 XAI (Explainable AI) Wrapper
-- **What**: Added an "Explainability" layer to model predictions.
+- **What**: Added an "Explainability" layer to model predictions with an interactive heatmap.
 - **Why**: Enterprise users need to know *why* an email was marked "High Urgency".
-- **Tech**: Integrated rule-based keyword highlighting and confidence score visualization to build trust in AI decisions.
+- **Tech**: Integrated urgency-aware keyword highlighting (Red=High, Orange=Medium) and confidence score visualization to build trust in AI decisions. Highlights are statically rendered for clarity.
 
 ### 3. 🛡️ Hybrid Safety Net
 - **What**: A failsafe system that overrides ML predictions for critical keywords (e.g., "system down").

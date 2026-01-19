@@ -89,23 +89,26 @@ function HistoryRow({ row, getUrgencyColor, onDelete }) {
                             }} 
                             elevation={0}
                         >
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                                 <AutoAwesomeIcon sx={{ fontSize: 18, color: 'primary.main' }} />
                                 <Typography variant="subtitle2" fontWeight={700}>AI Interpretation</Typography>
                             </Box>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2, fontStyle: 'italic' }}>
+                                Highlighted words indicate terms that significantly influenced the urgency classification.
+                            </Typography>
                             
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <Box sx={{ mb: 2 }}>
                                         <Typography variant="caption" fontWeight={700} color="text.secondary" display="block" gutterBottom>SUBJECT ANALYSIS</Typography>
                                         <Typography variant="body2" fontWeight={500}>
-                                            {renderHeatmap(row.subject, row.xai_highlights)}
+                                            {renderHeatmap(row.subject, row.xai_highlights, getUrgencyColor(row.urgency))}
                                         </Typography>
                                     </Box>
                                     <Box>
                                         <Typography variant="caption" fontWeight={700} color="text.secondary" display="block" gutterBottom>CONTENT ANALYSIS</Typography>
                                         <Typography variant="body2" sx={{ lineHeight: 1.7, color: 'text.secondary' }}>
-                                            {renderHeatmap(row.text, row.xai_highlights)}
+                                            {renderHeatmap(row.text, row.xai_highlights, getUrgencyColor(row.urgency))}
                                         </Typography>
                                     </Box>
                                 </Grid>
