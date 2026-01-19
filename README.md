@@ -1,7 +1,8 @@
 # AI-Powered Smart Email Classifier for Enterprises
 
 Live Link: https://enterprises-email-classifier.onrender.com/
-Backend Space Link (Hugging Face): 
+
+Backend Space Link (Hugging Face): https://huggingface.co/spaces/AnmolMahanty/email-classifier-dashboard/tree/main
 
 > **Note**: The Hugging Face Space contains the backend and a simple UI. To properly experience the full application, please use the **Live Link** above.
 
